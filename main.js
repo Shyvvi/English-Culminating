@@ -88,6 +88,10 @@ class Vec2d {
         this.y = value;
     }
 
+    clone() {
+        return new Vec2d(this.x, this.y);
+    }
+
     /**
      * Logs the value
      */
@@ -300,18 +304,99 @@ function getNewID() {
 }
 
 class TextBox {
+    spawnLocation;
+    containerDiv;
+    IDRoot;
+    width;
+    text;
+    ID = getNewID();
+    constructor(spawnLocation, containerDiv, IDRoot, width, text) {
+        this.spawnLocation = spawnLocation;
+        this.containerDiv = containerDiv;
+        this.IDRoot = IDRoot;
+        this.width = width;
+        this.text = text;
+        initialize();
+    }  
+    initialize() {
+        console.log("test");
+        // create the HTML img and store it inside of a constant blah blah blah
+        const P_ELEMENT = document.createElement("p");
+        // set the necessary CSS values
+        P_ELEMENT.style.position = "absolute";
+        P_ELEMENT.style.maxWidth = this.width+"%";
+        // again, set the ID of the HTML element so it can be referred to in the future by this object
+        P_ELEMENT.id = this.getID();
+
+        // push the image to the div in the actual HTML
+        document.getElementById(this.containerDiv).appendChild(P_ELEMENT);
     
+        // move the image to the spawn location provided within the super constructor
+        this.moveSprite(this.spawnLocation);
+    }
+
+    getID() {
+        return this.IDRoot+"-"+this.ID;
+    }
+
+    // function for getting the HTML element which this object is linked to
+    getP() {
+        return document.getElementById(this.getID());
+    }
+
+    setP(text) {
+        this.getP().innerText = text;
+    }
+
+    // function for changing the location of this sprite
+    moveText(vec2d) {
+        this.getSprite().style.left = vec2d.getX() + "px";
+        this.getSprite().style.top = vec2d.getY() + "px";
+    }
+    // get the location of the sprite
+    getTextLocation() {
+        return new Vec2d(
+            // also offset so the location of the sprite is anchored to it's center rather than the top left corner
+            parseInt(String(this.getSprite().style.left).replace("px", "")), 
+            parseInt(String(this.getSprite().style.top).replace("px", ""))
+        );
+    }
 }
 
 // -------------------------------------- NEW CLASSES ---------------------------------------
 
-
+const LIGHT_MOVEMENT_SPEED = 15;
+let LIGHT_FLICKER_AMOUNT = 3;
+let gradientPos = new Vec2d(window.outerWidth/2, window.outerHeight/2);
+let mousePos = new Vec2d(0, 0);
+new TextBox(new Vec2d(200, 200), "text-container", "text", 200, "testing testing testing");
 
 initialize();
 function initialize() {
-
+    document.addEventListener("mousemove", (e) => {
+        mousePos = new Vec2d(e.clientX, e.clientY);
+    });
 }
 
 function tick() {
+    moveLight();
+}
 
+function moveLight() {
+    let gradientDifference = mousePos.subtract(gradientPos);
+    gradientDifference.divide(LIGHT_MOVEMENT_SPEED);
+
+    gradientPos = gradientPos.add(gradientDifference);
+
+    let gradientCenter = new Vec2d((gradientPos.getX() / window.innerWidth) * 100, (gradientPos.getY() / window.innerHeight) * 100);
+    let gradientSize = getRandomInt(280-LIGHT_FLICKER_AMOUNT, 280+LIGHT_FLICKER_AMOUNT);
+
+    const revealedArea = document.querySelector(".revealed-area");
+    revealedArea.style.background = `radial-gradient(circle ${gradientSize}px at ${gradientCenter.getX()}% ${gradientCenter.getY()}%, transparent 10%,rgba(0, 0, 0, 0.98))`;
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
