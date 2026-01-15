@@ -227,12 +227,12 @@ class ImageHTMLElement {
     }
 
     // function for setting the opacity of the sprite
-    setSpriteOpacity(opacity) {
+    setOpacity(opacity) {
         this.getSprite().style.opacity = opacity / 100+"";
     }
 
     // function for getting the opacity of the sprite
-    getSpriteOpacity() {
+    getOpacity() {
         return this.getSprite().style.opacity * 100;
     }
 }
@@ -316,7 +316,7 @@ class TextBox {
         this.IDRoot = IDRoot;
         this.width = width;
         this.text = text;
-        initialize();
+        this.initialize();
     }  
     initialize() {
         console.log("test");
@@ -328,11 +328,11 @@ class TextBox {
         // again, set the ID of the HTML element so it can be referred to in the future by this object
         P_ELEMENT.id = this.getID();
 
-        // push the image to the div in the actual HTML
         document.getElementById(this.containerDiv).appendChild(P_ELEMENT);
     
         // move the image to the spawn location provided within the super constructor
-        this.moveSprite(this.spawnLocation);
+        this.moveText(this.spawnLocation);
+        this.setText(this.text);
     }
 
     getID() {
@@ -344,32 +344,78 @@ class TextBox {
         return document.getElementById(this.getID());
     }
 
-    setP(text) {
+    // function for setting the actual text to be displayed
+    setText(text) {
         this.getP().innerText = text;
+    }
+
+    // function for setting the opacity of the sprite
+    setOpacity(opacity) {
+        this.getSprite().style.opacity = opacity / 100+"";
+    }
+
+    // function for getting the opacity of the sprite
+    getOpacity() {
+        return this.getSprite().style.opacity * 100;
     }
 
     // function for changing the location of this sprite
     moveText(vec2d) {
-        this.getSprite().style.left = vec2d.getX() + "px";
-        this.getSprite().style.top = vec2d.getY() + "px";
+        this.getP().style.left = vec2d.getX() + "px";
+        this.getP().style.top = vec2d.getY() + "px";
     }
     // get the location of the sprite
     getTextLocation() {
         return new Vec2d(
             // also offset so the location of the sprite is anchored to it's center rather than the top left corner
-            parseInt(String(this.getSprite().style.left).replace("px", "")), 
-            parseInt(String(this.getSprite().style.top).replace("px", ""))
+            parseInt(String(this.getP().style.left).replace("px", "")), 
+            parseInt(String(this.getP().style.top).replace("px", ""))
         );
     }
 }
 
 // -------------------------------------- NEW CLASSES ---------------------------------------
 
+class Page extends TickingElement {
+    displayed = true;
+    elementArray = [];
+    constructor(elementArray) {
+        super();
+        this.elementArray = elementArray;
+    }
+
+    setDisplayed(value) {
+        this.displayed = value;
+        for (let i = 0; i < this.elementArray.length; i++) {
+            this.elementArray[i].getP().style.display = value ? "block" : "none";
+            if(value) {
+                this.elementArray[i].setOpacity(0);
+            }
+        }
+    }
+
+    tick() {
+        if(displayed) {
+            this.elementTransition();
+        }
+    }
+
+    elementTransition(element) {
+        if(element.getOpacity() <= 1) {
+            element.setOpacity(element.getOpacity() + 1);
+        }
+    }
+}
+
 const LIGHT_MOVEMENT_SPEED = 15;
 let LIGHT_FLICKER_AMOUNT = 3;
 let gradientPos = new Vec2d(window.outerWidth/2, window.outerHeight/2);
 let mousePos = new Vec2d(0, 0);
-new TextBox(new Vec2d(200, 200), "text-container", "text", 200, "testing testing testing");
+
+alwynMorrisPage = new Page([
+    new TextBox(new Vec2d(200, 200), "text-container", "text", 200, "testing testing testing"),
+    new ImageHTMLElement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOMbyoBHZ71JnhAqCdljrc_YAURKggtdB3XaYRZwlnHdq-aChrvEjXJBqVjkW6-uMhMPpIcr-Gcz6ooBi96pl-FxWfVm2Vt4qptDPcQg&s=10", new Vec2d(300, 200), "image-container", "image")
+]);
 
 initialize();
 function initialize() {
