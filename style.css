@@ -1,6 +1,5 @@
 body {
   font-family: "Times New Roman", Times, serif;
-  max-width: 700px;
   margin: 0 auto;
   background-color: black;
 }
@@ -18,4 +17,36 @@ p, h1, h2, h3, h4, h5, h6 {
     rgba(0, 0, 0, 0.98)
   );
   pointer-events: none;
+}
+
+#image-container {
+  width:auto;
+}
+
+#next-button {
+  position:absolute;
+  left: 75vw;
+  top: 5vh;
+  transform: translate(-50%, -50%); 
+}
+
+#previous-button {
+  position:absolute;
+  left: 25vw;
+  top: 5vh;
+  transform: translate(-50%, -50%); 
+}
+
+#title {
+  position:absolute;
+  left: 50vw;
+  top: 2vh;
+  transform: translate(-50%, -50%); 
+}
+
+#space-hint {
+  position:absolute;
+  left: 50vw;
+  top: 50vh;
+  transform: translate(-50%, -50%); 
 }
