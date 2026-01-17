@@ -445,7 +445,8 @@ let pages = [
     homePage = new Page([
         new TextBox(new Vec2d(50, 20).screenPercent(), 'text-container', 'text', 80, 'Explore a handful of many unsung Indigenous voices which have made an impact and hold significance to their communities in one way or another.').center(),
         new TextBox(new Vec2d(50, 30).screenPercent(), 'text-container', 'text', 80, 'Akin to the darkness on this website, these 3 unsung Indigenous voices deserve more recognition for the impacts and efforts which they have made.').center(),
-        new TextBox(new Vec2d(50, 40).screenPercent(), 'text-container', 'text', 80, 'Spread the word now, and sing what\'s otherwise unsung.').center()
+        new TextBox(new Vec2d(50, 40).screenPercent(), 'text-container', 'text', 80, 'Spread the word now, and sing what\'s otherwise unsung.').center(),
+        new TextBox(new Vec2d(50, 80).screenPercent(), 'text-container', 'text', 80, '(If an issue occurs, reload the website or try resizing the website and then reloading it, I apologize in advance for any potential inconveniences as a result of programming 😅)').center()
     ]),
     alwynMorrisPage = new Page([
         new TextBox(new Vec2d(10, 10).screenPercent(), 'text-container', 'text', 80, 'Alwyn Morris was an Indigenous sprint kayaker who is a member of the Mohawk Nation of Kahnawake, raised by his grandparents near Montreal, Quebec he followed his career to win multiple international titles representing Canada. His cultural identity of being Mohawk and Indigenous played a major role in how he represented himself publicly which included at competition, this would eventually lead to him not only breaking history, but creating a historical moment at the Olympics.'),
